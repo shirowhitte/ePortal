@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd  
+        http://www.springframework.org/schema/mvc  
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">  
+    <!-- Provide support for component scanning -->  
+    <context:component-scan base-package="com.controllers" />  
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <!--Provide support for conversion, formatting and validation -->  
+    <mvc:annotation-driven/>  
+          <!-- Spring Email Sender Bean Configuration -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp-mail.outlook.com" />
+        <property name="port" value="587" />
+        <property name="username" value="shirowhitte@hotmail.com" />
+        <property name="password" value="Testing97203.xsD" />
+        <property name="javaMailProperties">
+
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.debug">true</prop>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.required">true</prop>
+                <prop key="mail.smtp.socketFactory.port">587</prop>
+                <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+                <prop key="mail.smtp.ssl.trust">*</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- Define Spring MVC view resolver -->  
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/jsp/"></property>  
+        <property name="suffix" value=".jsp"></property>       
+     </bean> 
+     <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">    
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>    
+		<property name="url" value="jdbc:mysql://localhost:3306/kyler?serverTimezone=UTC"></property>    
+		<property name="username" value="root"></property>    
+		<property name="password" value="dbuser"></property>    
+	 </bean>  
+	 
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		 <!-- setting maximum upload size -->
+		<property name="maxUploadSize" value="10000000"></property>
+	</bean>  
+		    
+	 <bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">    
+		<property name="dataSource" ref="ds"></property>    
+	 </bean>    
+		    
+	 <bean id="customerDao" class="com.dao.CustomerDao">    
+		<property name="template" ref="jt"></property>    
+	 </bean>
+	 <bean id="orderDao" class="com.dao.OrderDao">    
+		<property name="template" ref="jt"></property>    
+	 </bean>        
+	 <bean id="productDao" class="com.dao.ProductDao">    
+		<property name="template" ref="jt"></property>    
+	 </bean> 
+	 <bean id="vendorDao" class="com.dao.VendorDao">    
+		<property name="template" ref="jt"></property>    
+	 </bean> 
+</beans>  
